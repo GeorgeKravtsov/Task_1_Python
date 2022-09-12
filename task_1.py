@@ -52,53 +52,52 @@ def create_table(connection, query):
 
 host = "localhost"
 username = "root"
-password = "my_database_mysql"
+password = "***"
 
 
-# connection = create_connection(host, username, password)
+connection = create_connection(host, username, password)
 db_name = "task_1"
-# create_database(connection, db_name)
+create_database(connection, db_name)
 
 connection = create_db_connection(host, username, password, db_name)
 
-# query = "CREATE TABLE IF NOT EXISTS students( \
-#             birthday DATE, \
-#             id INT(5) PRIMARY KEY NOT NULL, \
-#             name CHAR(27), \
-#             room INT(5), \
-#             sex CHAR(1) \
-#     )"
-# create_table(connection, query)
+query = "CREATE TABLE IF NOT EXISTS students( \
+            birthday DATE, \
+            id INT(5) PRIMARY KEY NOT NULL, \
+            name CHAR(27), \
+            room INT(5), \
+            sex CHAR(1) \
+    )"
+create_table(connection, query)
 
 engine = create_engine(f"mysql+pymysql://{username}:{password}@localhost:3306/task_1")
 
-# students_df = pd.read_json('students.json')
-# students_df.birthday = pd.to_datetime(students_df.birthday)
-# students_df.to_sql(name='students',
-#                     con=engine,
-#                     index=False,
-#                     if_exists='append'
-#                 )
+students_df = pd.read_json('students.json')
+students_df.birthday = pd.to_datetime(students_df.birthday)
+students_df.to_sql(name='students',
+                    con=engine,
+                    index=False,
+                    if_exists='append'
+                )
 
-# query = "CREATE TABLE IF NOT EXISTS rooms( \
-#             id INT(5) PRIMARY KEY NOT NULL, \
-#             name INT(5) NOT NULL, \
-#             FOREIGN KEY (name) REFERENCES students(room) \
-#             )"
+query = "CREATE TABLE IF NOT EXISTS rooms( \
+            id INT(5) PRIMARY KEY NOT NULL, \
+            name INT(5) NOT NULL, \
+            FOREIGN KEY (name) REFERENCES students(room) \
+            )"
 
-# create_table(connection, query)
-# rooms_df = pd.read_json('rooms.json')
-# rooms_df.name = rooms_df.name.apply(lambda x: x[-1])
-# rooms_df.name = pd.to_numeric(rooms_df.name)
-# rooms_df.to_sql(name='rooms',
-#                     con=engine,
-#                     index=False,
-#                     if_exists='append'
-#                 )
+create_table(connection, query)
+rooms_df = pd.read_json('rooms.json')
+rooms_df.name = rooms_df.name.apply(lambda x: x[-1])
+rooms_df.name = pd.to_numeric(rooms_df.name)
+rooms_df.to_sql(name='rooms',
+                    con=engine,
+                    index=False,
+                    if_exists='append'
+                )
 
-# query = "SELECT room, COUNT(id) AS number_of_sudents \
-#         FROM students \
-#         GROUP BY room"
+query = "SELECT room, COUNT(id) AS number_of_sudents \
+        FROM students \
+        GROUP BY room"
 
-# pd.read_sql(query, engine).to_json('number_of_students_in_room.json')
-print(pd.read_json('number_of_students_in_room.json'))
+pd.read_sql(query, engine).to_json('number_of_students_in_room.json')
